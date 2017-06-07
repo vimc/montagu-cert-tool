@@ -1,0 +1,51 @@
+group 'org.vaccineimpact'
+version '1.0-SNAPSHOT'
+
+buildscript {
+    ext.kotlin_version = '1.1.2-2'
+
+    repositories {
+        mavenCentral()
+        // This is needed for gradle-docker
+        jcenter()
+    }
+
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "se.transmode.gradle:gradle-docker:1.2"
+    }
+}
+
+apply plugin: 'application'
+apply plugin: 'kotlin'
+apply plugin: 'docker'
+
+mainClassName = "org.vaccineimpact.certificate_tool.AppKt"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
+}
+
+docker {
+    baseImage = "openjdk:8u121-jre"
+}
+
+def docker_version = 'UNKNOWN'
+if (hasProperty('docker_version')) {
+    docker_version = docker_version
+}
+def docker_name = 'montagu-cert-tool'
+if (hasProperty('docker_name')) {
+    docker_name = docker_name
+}
+
+distDocker {
+    dependsOn = [build]
+    push = true
+    tag = docker_name
+    tagVersion = docker_version
+}
