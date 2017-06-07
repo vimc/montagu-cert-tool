@@ -2,3 +2,4 @@
 .idea/*
 build/*
 cert-tool.iml
+keystore

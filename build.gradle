@@ -34,18 +34,18 @@ docker {
     baseImage = "openjdk:8u121-jre"
 }
 
-def docker_version = 'UNKNOWN'
+def tool_docker_version = 'UNKNOWN'
 if (hasProperty('docker_version')) {
-    docker_version = docker_version
+    tool_docker_version = docker_version
 }
-def docker_name = 'montagu-cert-tool'
+def tool_docker_name = 'montagu-cert-tool'
 if (hasProperty('docker_name')) {
-    docker_name = docker_name
+    tool_docker_name = docker_name
 }
 
 distDocker {
     dependsOn = [build]
     push = true
-    tag = docker_name
-    tagVersion = docker_version
+    tag = tool_docker_name
+    tagVersion = tool_docker_version
 }

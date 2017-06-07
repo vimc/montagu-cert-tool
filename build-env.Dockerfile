@@ -16,17 +16,19 @@ RUN apt-get update
 RUN apt-get install -y docker-ce=17.03.0~ce-0~debian-jessie
 
 # Setup gradle
-COPY src/gradlew /src/
-COPY src/gradle /src/gradle/
-WORKDIR /src
+WORKDIR /build
+COPY gradlew .
+COPY gradle .
+RUN mkdir gradle
+COPY gradle/wrapper/ gradle/wrapper/
 RUN ./gradlew
 
 # Pull in dependencies
-COPY ./src/build.gradle /api/src/
+COPY build.gradle .
 RUN ./gradlew
 
 # Copy source
-COPY . /src
+COPY src/ ./src/
 
 ARG git_id='UNKNOWN'
 ARG git_branch='UNKNOWN'
