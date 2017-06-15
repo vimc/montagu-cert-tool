@@ -32,7 +32,7 @@ COPY src/ ./src/
 
 ARG git_id='UNKNOWN'
 ARG git_branch='UNKNOWN'
-ARG registry=montagu.dide.ic.ac.uk:5000
+ARG registry=docker.montagu.dide.ic.ac.uk:5000
 ARG name=montagu-cert-tool
 
 ENV GIT_ID $git_id
