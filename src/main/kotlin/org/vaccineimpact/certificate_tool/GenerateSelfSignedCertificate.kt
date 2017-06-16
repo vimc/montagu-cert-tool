@@ -6,9 +6,8 @@ class GenerateSelfSignedCertificate : Action("gen-self-signed")
 {
     override fun run(args: List<String>)
     {
-        val usage = "Usage: cert-tool $shortName output_dir [keystore_password]"
+        val usage = "Usage: cert-tool $shortName output_dir"
         val outputPath = getArg(0, args) ?: throw CertToolError(usage)
-        val settings = getPasswordSettings(1, args, "Enter new password for private key: ")
         val distinguishedName = "/C=GB/L=Location/O=Vaccine Impact Modelling Consortium/OU=Montagu/CN=montagu.vaccineimpact.org"
         val home = File(System.getProperty("user.home"))
 
@@ -24,9 +23,9 @@ class GenerateSelfSignedCertificate : Action("gen-self-signed")
                 "-sha256",
                 "-subj", distinguishedName,
                 "-days", "365",
+                "-nodes",
                 "-keyout", "$outputPath/ssl_key.pem",
-                "-out", "$outputPath/certificate.pem",
-                "-passout", "pass:${settings.password}"
+                "-out", "$outputPath/certificate.pem"
         ).runCommand(home)
 
         println("\nWrote self-signed certificate to $outputPath")
