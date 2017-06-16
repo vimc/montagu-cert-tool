@@ -25,8 +25,7 @@ abstract class Action(val shortName: String)
     companion object
     {
         val all = listOf(
-            GenerateSelfSignedCertificate(),
-            ExportCertificateAsPEMFiles()
+            GenerateSelfSignedCertificate()
             //RetrieveRealCertificate
         )
     }

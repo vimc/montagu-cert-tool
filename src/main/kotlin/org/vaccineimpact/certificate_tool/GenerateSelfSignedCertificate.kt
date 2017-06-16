@@ -6,30 +6,29 @@ class GenerateSelfSignedCertificate : Action("gen-self-signed")
 {
     override fun run(args: List<String>)
     {
-        val settings = getPasswordSettings(0, args, "Enter new keystore password: ")
-        val distinguishedName = "CN=vaccineimpact.org, OU=Montagu, O=Vaccine Impact Modelling Consortium, L=London, C=GB"
+        val usage = "Usage: cert-tool $shortName output_dir [keystore_password]"
+        val outputPath = getArg(0, args) ?: throw CertToolError(usage)
+        val settings = getPasswordSettings(1, args, "Enter new password for private key: ")
+        val distinguishedName = "/C=GB/L=Location/O=Vaccine Impact Modelling Consortium/OU=Montagu/CN=montagu.vaccineimpact.org"
         val home = File(System.getProperty("user.home"))
 
-        listOf("keytool", "-genkeypair",
-                "-dname", distinguishedName,
-                "-keyalg", "RSA",
-                "-alias", "api",
-                "-keystore", "keystore",
-                "-validity", "365",
-                "-keysize", "2048",
-                "-storepass", settings.password,
-                "-keypass", settings.password
+        if (!outputPath.startsWith("/"))
+        {
+            throw CertToolError("outputPath must be an absolute path. It was $outputPath")
+        }
+
+        listOf(
+                "openssl",
+                "req", "-x509",
+                "-newkey", "rsa:4096",
+                "-sha256",
+                "-subj", distinguishedName,
+                "-days", "365",
+                "-keyout", "$outputPath/ssl_key.pem",
+                "-out", "$outputPath/certificate.pem",
+                "-passout", "pass:${settings.password}"
         ).runCommand(home)
 
-        if (settings.interactive)
-        {
-            println("\nWrote self-signed certificate to $home/keystore.")
-            println("Suggested next action:")
-            println("sudo mv $home/keystore /etc/montagu/api/keystore")
-        }
-        else
-        {
-            "cat keystore".runCommand(home)
-        }
+        println("\nWrote self-signed certificate to $outputPath")
     }
 }
