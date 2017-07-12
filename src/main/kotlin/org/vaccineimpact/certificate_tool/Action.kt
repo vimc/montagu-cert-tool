@@ -12,8 +12,8 @@ abstract class Action(val shortName: String)
     companion object
     {
         val all = listOf(
-            GenerateSelfSignedCertificate()
-            //RetrieveRealCertificate
+            GenerateSelfSignedCertificate(),
+            GenerateKeyPair()
         )
     }
 }
