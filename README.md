@@ -24,3 +24,18 @@ running the webapp.
 
 The `-v` command makes the `workspace` folder available to the cert-tool's 
 container at `/workspace`. 
+
+## Generate an RSA keypair
+To generate an RSA keypair using OpenSSL run
+
+    mkdir workspace
+    docker run --rm \
+        -v $PWD/workspace:/workspace \
+        docker.montagu.dide.ic.ac.uk:5000/montagu-cert-tool:master \
+        gen-keypair /workspace
+
+This will output two files, `private_key.der` and `public_key.der`, to the
+local `workspace` folder. Be careful with the unencrypted privat key - any
+spare copies should be deleted. e.g.
+
+    rm -r workspace
