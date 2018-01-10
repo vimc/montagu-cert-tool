@@ -24,5 +24,9 @@ class GenerateKeyPair : Action("gen-keypair")
         // Output public key portion in DER format (so Java can read it)
         "openssl rsa -in private_key.pem -pubout -outform DER -out $outputPath/public_key.der".runCommand()
         println("Wrote public key to $outputPath/public_key.der")
+
+        // Output public key portion in PEM format (so Caddy can read it)
+        "openssl rsa -in private_key.pem -pubout -outform PEM -out $outputPath/public_key.pem".runCommand()
+        println("Wrote public PEM key to $outputPath/public_key.pem")
     }
 }
