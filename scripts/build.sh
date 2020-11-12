@@ -1,20 +1,30 @@
 #!/usr/bin/env bash
-set -e
-git_id=$(git rev-parse --short HEAD)
-git_branch=$(git symbolic-ref --short HEAD)
+set -ex
 
-# This is the path for teamcity agents. If running locally, pass in your own docker config location
+if [ "$BUILDKITE" = "true" ]; then
+    GIT_ID=${BUILDKITE_COMMIT:0:7}
+else
+    GIT_ID=$(git rev-parse --short=7 HEAD)
+fi
+
+if [ "$BUILDKITE" = "true" ]; then
+    GIT_BRANCH=$BUILDKITE_BRANCH
+else
+    GIT_BRANCH=$(git symbolic-ref --short HEAD)
+fi
+
+# This is the path for BuildKite agents. If running locally, pass in your own docker config location
 # i.e. /home/{user}/.docker/config.json
-docker_auth_path=${1:-/opt/teamcity-agent/.docker/config.json}
+BUILDKITE_DOCKER_AUTH_PATH=/var/lib/buildkite-agent/.docker/config.json
 
 docker build \
     --tag montagu-cert-tool-build \
-    --build-arg git_id=$git_id \
-    --build-arg git_branch=$git_branch \
+    --build-arg git_id=$GIT_ID \
+    --build-arg git_branch=$GIT_BRANCH \
     -f build-env.Dockerfile \
     .
 
 docker run --rm \
-    -v $docker_auth_path:/root/.docker/config.json \
+    -v $BUILDKITE_DOCKER_AUTH_PATH:/root/.docker/config.json \
     -v /var/run/docker.sock:/var/run/docker.sock \
     montagu-cert-tool-build

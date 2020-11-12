@@ -1,4 +1,6 @@
 # Montagu Certificate Tool
+[![Build status](https://badge.buildkite.com/c4dd1d9def806ded2bc5a36680f9705835c695dacc9da5d7e1.svg?master)](https://buildkite.com/mrc-ide/montagu-certificate-tool)
+
 This is a Kotlin application for performing various tasks relating to 
 certificate management.
 
