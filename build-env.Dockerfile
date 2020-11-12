@@ -1,19 +1,4 @@
-FROM openjdk:8u121-jdk
-
-# Install docker
-RUN apt-get update
-RUN apt-get install -y \
-        apt-transport-https \
-        ca-certificates \
-        curl \
-        software-properties-common
-RUN curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
-RUN add-apt-repository \
-   "deb [arch=amd64] https://download.docker.com/linux/debian \
-   $(lsb_release -cs) \
-   stable"
-RUN apt-get update
-RUN apt-get install -y docker-ce=17.03.0~ce-0~debian-jessie
+FROM vimc/node-docker-openjdk:master
 
 # Setup gradle
 WORKDIR /build
