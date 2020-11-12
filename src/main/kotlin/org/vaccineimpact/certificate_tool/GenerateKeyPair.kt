@@ -14,8 +14,8 @@ class GenerateKeyPair : Action("gen-keypair")
         }
         val home = File(System.getProperty("user.home"))
 
-        // Generate a 2048-bit RSA private key (this does not go in the output folder)
-        "openssl genrsa -out private_key.pem 2048".runCommand()
+        // Generate a 4096-bit RSA private key (this does not go in the output folder)
+        "openssl genrsa -out private_key.pem 4096".runCommand()
 
         // Convert private Key to PKCS#8 format (so Java can read it)
         "openssl pkcs8 -topk8 -inform PEM -outform DER -in private_key.pem -out $outputPath/private_key.der -nocrypt".runCommand()
